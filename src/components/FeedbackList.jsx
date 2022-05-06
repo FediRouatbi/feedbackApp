@@ -2,11 +2,13 @@ import React, { useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import FeedbackItem from "./FeedbackItem";
 import { FeedbackContext } from "../context/FeedbackContext";
+import Spinner from "./shared/Spinner";
 function FeedbackList({ handelDelete }) {
-  const { feedback } = useContext(FeedbackContext);
+  const { feedback, isLoading } = useContext(FeedbackContext);
 
-  if (!feedback || feedback.lenght === 0) return <p>No Feedback Yet</p>;
-
+  if (!isLoading && (!feedback || feedback.lenght === 0))
+    return <p>No Feedback Yet</p>;
+  if (isLoading) return <Spinner />;
   // return (
   //   <div className="feeedback-list">
   //     {data.map((elem) => (
@@ -31,11 +33,7 @@ function FeedbackList({ handelDelete }) {
             animate={{ opacity: 1, transform: "translateY(0px)" }}
             exit={{ opacity: 0, transform: "translateY(-30px)" }}
           >
-            <FeedbackItem
-              rating={elem.rating}
-              text={elem.text}
-              id={elem.id}
-            />
+            <FeedbackItem rating={elem.rating} text={elem.text} id={elem.id} />
           </motion.div>
         ))}
       </AnimatePresence>
